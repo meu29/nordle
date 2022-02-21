@@ -1,9 +1,10 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { RecoilRoot } from "recoil";
-import { ChakraProvider } from "@chakra-ui/react";
-import { APP_NAME } from "../utils";
+import { ChakraProvider, CSSReset, ColorModeScript } from "@chakra-ui/react";
 import Layout from "../layouts";
+import { theme } from "../themes";
+import { APP_NAME } from "../utils";
 
 const App = ({ Component, pageProps }: AppProps) => {
 
@@ -14,7 +15,9 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <title>{APP_NAME}</title>
             </Head>
             <RecoilRoot>
-                <ChakraProvider>
+                <ChakraProvider theme={theme}>
+                    <CSSReset />
+                    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
                     <Layout>
                         <Component {...pageProps} />
                     </Layout>

@@ -1,8 +1,10 @@
-type SearchState = {
-    type: string;
+type SettingState = {
     pref: string;
 }
 
-type SettingState = {
-    weight: number;
+type AnswerState = {
+    answers: Answer[];
+    row: number;
+    col: number;
+    theme: WordleTheme;
 }

@@ -1,11 +1,15 @@
-type SearchAction = {
-    type: "SELECT_TYPE",
+type AnswerAction = {
+    type: "INIT_ANSWERS",
     payload: {
-        type: string;
+        theme: WordleTheme;
     }
 } | {
-    type: "SELECT_PREF",
+    type: "INPUT_ANSWER",
     payload: {
-        pref: string;
+        letter: string;
     }
+} | {
+    type: "DELETE_ANSWER",
+} | {
+    type: "SUBMIT_ANSWER" 
 }

@@ -1,48 +1,28 @@
-import {
-    Flex, 
-    Heading,
-    IconButton,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    Text,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
-    useBoolean
-} from "@chakra-ui/react";
+import NextLink from "next/link";
+import { Flex, Heading, Link, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, Select, useBoolean } from "@chakra-ui/react";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { useSettings } from "../hooks/setting";
 import { APP_NAME } from "../utils";
 
 const Header: React.VFC = () => {
 
-    const [open, setOpen] = useBoolean();
-
-    const { settings, updateWeight } = useSettings();
-    const handleWeightNumberInputChange = (_: string, value: number) => updateWeight(value);
+    const [ open, setOpen ] = useBoolean();
+    const { settings, updatePref } = useSettings();
 
     return (
         <Flex as="nav" justify="space-between" padding={6}>
-            <Heading as="h1" size="lg">{APP_NAME}</Heading>
+            <NextLink passHref href="/">
+                <Link>
+                    <Heading as="h1" size="lg">{APP_NAME}</Heading>
+                </Link>
+            </NextLink>
             <IconButton icon={<SettingsIcon />} aria-label="setting" onClick={setOpen.on} />
             <Modal isOpen={open} onClose={setOpen.off}>
                 <ModalOverlay />
-                <ModalContent p="4" textAlign="center">
+                <ModalContent>
                     <ModalHeader>設定</ModalHeader>
                     <ModalBody>
-                        <Text mb="3">体重</Text>
-                        <NumberInput min={1} value={settings.weight} onChange={handleWeightNumberInputChange}>
-                            <NumberInputField />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
+
                     </ModalBody>
                 </ModalContent>
             </Modal>

@@ -6,7 +6,7 @@ const { persistAtom } = recoilPersist();
 export const settingState = atom<SettingState>({
     key: "settings",
     default: {
-        weight: 60
+        pref: "東京都"
     },
     effects_UNSTABLE: [persistAtom]
 })

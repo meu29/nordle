@@ -5,13 +5,16 @@ export const useSettings = (): UseSettings => {
 
     const [settings, setSettings] = useRecoilState(settingState);
 
-    const updateWeight = (weight: number) => setSettings(prev_settings => {
+    const updatePref = (pref: string) => setSettings((prev_settings) => {
         return {
             ...prev_settings,
-            weight: isNaN(weight) ? prev_settings.weight : weight
+            pref: pref
         }
     });
 
-    return { settings, updateWeight }
+    return {
+        settings,
+        updatePref
+    }
 
 }

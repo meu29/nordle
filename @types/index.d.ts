@@ -1,14 +1,8 @@
-type Restaurant = {
+type WordleTheme = {
     id: string;
-    name; string;
-    type: string;
-    address: string;
-    lat: number;
-    lon: number;
+    content: string;
+    content_furigana: string;
+    tag: string;
 }
 
-type Station = {
-    name: string;
-    oneline_distance: number;
-    burned_calorie: number;
-}
+type Answer = string[];
