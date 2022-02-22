@@ -6,3 +6,8 @@ type WordleTheme = {
 }
 
 type Answer = string[];
+
+type LetterStyle = {
+    color: string, 
+    bg: string
+}

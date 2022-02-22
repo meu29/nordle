@@ -1,40 +1,48 @@
 import type { NextPage, GetStaticProps } from "next";
-import { Container, Box, VStack, HStack, Input, Text, Button, Center } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { Container, VStack, HStack, Text, Button, Center, useToast } from "@chakra-ui/react";
 import { Keyboard } from "../components/keyboard";
 import { ColoredLetterBoxGroup } from "../components/colored-letter-box-group";
 import { useAnswerState } from "../hooks/answer";
-
+import { usePlayLog } from "../hooks/playlog";
 import { client } from "../cms";
 
-import { useEffect } from "react";
+const IndexPage: NextPage<IndexPageProps> = ({ theme }) => {
 
-const IndexPage: NextPage<{themes: WordleTheme[]}> = ({ themes }) => {
+    const { answerState, inputAnswer, deleteAnswer, submitAnswer } = useAnswerState(theme.content_furigana.length);
 
-    const { answerState, initAnswers, inputAnswer, deleteAnswer, submitAnswer } = useAnswerState();
-    /*
+    const { updatePlayLog } = usePlayLog();
+
+    const toast = useToast();
+
     useEffect(() => {
-        if (answerState.answers) {
-            alert("終了")
+        if (answerState.row > 0) {
+            /* ここでpositionを指定するとエラーになった */
+            let toast_option = {description: `正解は${theme.content}(${theme.content_furigana})でした`, isClosable: true}
+            if (answerState.answers[answerState.row - 1].join("") === theme.content_furigana) {
+                toast({...toast_option, title: "正解", status: "success", position: "top"});
+                updatePlayLog(true);
+            } else if (answerState.row === 5) {
+                toast({...toast_option, title: "不正解", status: "error", position: "top"});
+                updatePlayLog(false);
+            }
         }
-    }, [past_answers])
-    */
-
-    useEffect(() => initAnswers(themes[Math.floor(Math.random() * themes.length)]), []);
+    }, [answerState.row]);
 
     return (
         <Container>
-            {JSON.stringify(answerState)}
             <VStack mb="10%">
                 {answerState.answers.map((answer, row) => 
-                    <ColoredLetterBoxGroup answer={answer} theme={answerState.theme.content_furigana} checked={answerState.row > row} />)
-                }
-                {/*Object.values(answerState.colored_past_answers).map((answer, i) => <Box key={i}><ColoredLetterBoxGroup answer={answer} theme={themes[0].content_furigana} checked={false} /></Box> )*/}
+                    <div key={`colored-letter-${row}`}>
+                        <ColoredLetterBoxGroup row={row} answer={answer} theme_content={theme.content_furigana} checked={answerState.row > row} />
+                    </div>
+                )}
             </VStack>
             <Keyboard handleLetterButtonClick={inputAnswer} />
             <Center>
                 <HStack>
-                    <Button onClick={deleteAnswer}>一文字消す</Button>
-                    <Button onClick={submitAnswer}>Enter</Button>
+                    <Button onClick={deleteAnswer} color="white" bg="tomato">一文字削除</Button>
+                    <Button onClick={submitAnswer} color="white" bg="skyblue">解答</Button>
                 </HStack>
             </Center>
         </Container>
@@ -51,16 +59,18 @@ export const getStaticProps: GetStaticProps = async () => {
         }
     });
 
-    //ここで店apiも叩く
+    const themes = res.contents.map(content => {
+        return {
+            ...content,
+            tag: content.tag[0]
+        }
+    });
+
     return {
         props: {
-            themes: res.contents.map(content => {
-                return {
-                    ...content,
-                    tag: content.tag[0]
-                }
-            })
-        }
+            theme: themes[Math.floor(Math.random() * themes.length)] 
+        },
+        revalidate: 10
     }
 
 }

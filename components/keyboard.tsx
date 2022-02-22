@@ -2,18 +2,18 @@ import { useMemo } from "react";
 import { Box, HStack, Button } from "@chakra-ui/react";
 import { KEYBOARD_LETTERS } from "../utils";
 
-export const Keyboard: React.VFC<{handleLetterButtonClick: (letter: string) => void}> = ({ handleLetterButtonClick }) => {
+export const Keyboard: React.VFC<KeyboardProps> = ({ handleLetterButtonClick }) => {
 
-    return (
+    return useMemo(() => (
         <Box mb="3%">
-            {KEYBOARD_LETTERS.map((row, i) => (
-                <HStack key={`row-${i}`} mb="1%">
-                    {row.map(letter => (
-                        <Button key={letter} disabled={letter === "　"} onClick={() => handleLetterButtonClick(letter)}>{letter}</Button>
+            {KEYBOARD_LETTERS.map((letters, i) => (
+                <HStack key={`keyboard-row-${i}`} mb="1%">
+                    {letters.map((letter, j)  => (
+                        <Button color="#ffffff" bg="#000000" key={`keyboard-row-${i}-${j}`} disabled={letter === "　"} onClick={() => handleLetterButtonClick(letter)}>{letter}</Button>
                     ))}
                 </HStack>
             ))}
         </Box>
-    );
+    ), []);
 
 }

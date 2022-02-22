@@ -1,11 +1,15 @@
 import { useReducer } from "react";
 import { answerReducer } from "../reducers/answer";
 
-export const useAnswerState = (): UseAnswerState => {
+//本家wordleはローカルストレージに保存しているっぽい
+export const useAnswerState = (theme_content_word_count: number): UseAnswerState => {
 
-    const [answerState, dispatch] = useReducer(answerReducer, {answers: [], row: 0, col: 0, theme: {id: "", content: "", content_furigana: "", tag: ""}});
-
-    const initAnswers = (theme: WordleTheme) => dispatch({type: "INIT_ANSWERS", payload: {theme: theme}});
+    const [answerState, dispatch] = useReducer(answerReducer, {
+        answers: [...Array(5)].map(_ => [...Array(theme_content_word_count)].map(_ => "　")),
+        row: 0,
+        col: 0,
+        theme_content_word_count: theme_content_word_count,
+    });
 
     const inputAnswer = (letter: string) => dispatch({type: "INPUT_ANSWER", payload: {letter: letter}});
 
@@ -15,7 +19,6 @@ export const useAnswerState = (): UseAnswerState => {
 
     return {
         answerState,
-        initAnswers,
         inputAnswer,
         deleteAnswer,
         submitAnswer,
