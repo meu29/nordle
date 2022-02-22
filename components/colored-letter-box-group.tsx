@@ -47,7 +47,7 @@ export const ColoredLetterBoxGroup: React.VFC<ColoredLetterBoxGroupProps> = ({ r
                 {answer.map((letter, col) => {
                     return (
                         <Box key={`colored-letter-${row}-${col}`} p="5" borderWidth="1px" borderRadius="lg" color={styles[col].color} bg={styles[col].bg}>
-                            <Text fontWeight="bold">{letter}</Text>
+                            <Text fontSize="18px" fontWeight="bold">{letter}</Text>
                         </Box>
                     )
                 })}

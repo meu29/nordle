@@ -2,7 +2,6 @@ type AnswerState = {
     answers: Answer[];
     row: number;
     col: number;
-    theme_content_word_count: number;
 }
 
 type PlayLogState = {

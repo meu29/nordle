@@ -1,4 +1,4 @@
-export const APP_NAME = "Wordle(Noodle)" as const;
+export const APP_NAME = "Nordle" as const;
 
 /* as constにしたらmap関数でコンパイルエラーになった */
 export const KEYBOARD_LETTERS = [
@@ -14,11 +14,4 @@ export const KEYBOARD_LETTERS = [
     ["ぉ", "ご", "ぞ", "ど", "　", "ぼ", "ぽ", "ょ", "　", "　"]
 ];
 
-/*
-
-ラーメン G013
-イタリアン G006
-和食 G004
-中華 G007
-
-*/
+export const ANSWER_LIMIT = 5;
