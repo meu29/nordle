@@ -1,12 +1,8 @@
-type AnswerState = {
-    answers: Answer[];
-    row: number;
-    col: number;
-}
+type LetterColorState = LetterColor[][];
 
-type PlayLogState = {
-    play_num: number;
-    clear_num: number;
-    current_streak: number;
-    max_streak: number;
+type AnswerState = {
+    answers: Record<number, string>
+    colors: Record<number, Record<number, LetterColor>>
+    index: number;
+    //corrected
 }

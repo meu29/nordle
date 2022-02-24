@@ -4,8 +4,3 @@ type UseAnswerState = {
     deleteAnswer: () => void;
     submitAnswer: () => void;
 }
-
-type UsePlayLogs = {
-    playlog: PlayLogState;
-    updatePlayLog: (cleared: boolean) => void;
-}

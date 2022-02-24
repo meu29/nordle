@@ -1,6 +1,5 @@
 export const APP_NAME = "Nordle" as const;
 
-/* as constにしたらmap関数でコンパイルエラーになった */
 export const KEYBOARD_LETTERS = [
     ["あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ"],
     ["い", "き", "し", "ち", "に", "ひ", "み", "　", "り", "　"],

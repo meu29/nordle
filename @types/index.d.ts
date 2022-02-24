@@ -5,9 +5,7 @@ type WordleTheme = {
     tag: string;
 }
 
-type Answer = string[];
-
-type LetterStyle = {
-    color: string, 
-    bg: string
+type LetterColor = {
+    color: string;
+    bg: string;
 }
