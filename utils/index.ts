@@ -14,3 +14,22 @@ export const KEYBOARD_LETTERS = [
 ];
 
 export const ANSWER_LIMIT = 5;
+
+export const LETTER_COLORS = {
+    EXACT_MATCH: {
+        color: "#ffffff", 
+        bg: "#4caf50"
+    },
+    PARTIAL_MATCH: {
+        color: "#ffffff", 
+        bg: "#C9B458"
+    },
+    NO_MATCH: {
+        color: "#ffffff", 
+        bg: "#757575"
+    },
+    UNRATED: {
+        color: "#000000", 
+        bg: "#ffffff"
+    }
+} as const;

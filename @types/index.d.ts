@@ -9,3 +9,8 @@ type LetterColor = {
     color: string;
     bg: string;
 }
+
+type Shop = {
+    name: string;
+    address: string;
+}
