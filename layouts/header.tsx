@@ -27,7 +27,7 @@ const Header: React.VFC = () => {
                         <Table>
                             <Tbody>
                                 {Object.values(past_themes).map(theme => 
-                                    <Tr>
+                                    <Tr key={theme.id}>
                                         <Td>{theme.content}</Td>
                                         <Td>
                                             <IconButton icon={<SearchIcon />} aria-label="search" onClick={() => handleSearchButtonClick(theme.content)} />

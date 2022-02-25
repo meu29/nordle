@@ -28,6 +28,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ theme }) => {
             <Box mb="10%">
                 {Object.keys(answerState.answers).map(row => (
                     <HStack mb="1%" key={`theme-${row}`}>
+                        
                         {Object.keys(answerState.colors[row]).map(col => (
                             <Box key={`theme-${row}-${col}`} p="5" borderWidth="1px" borderRadius="lg" color={answerState.colors[row][col].color} bg={answerState.colors[row][col].bg}>
                                 {answerState.answers[row][col] === undefined ? "　" : answerState.answers[row][col]}
@@ -38,13 +39,12 @@ const IndexPage: NextPage<IndexPageProps> = ({ theme }) => {
             </Box>
             <Box mb="3%">
                 {KEYBOARD_LETTERS.map((letters, row) => 
-                    useMemo(() => (
-                        <HStack key={`keyboard-row-${row}`} mb="1%">
-                            {letters.map((letter, col)  => (
-                                <Button key={`keyboard-row-${row}-${col}`} disabled={answerState.status !== "PLAYING"} onClick={() => inputAnswer(letter)}>{letter}</Button>
-                            ))}
-                        </HStack>
-                    ), [answerState.status])
+                    /* ここでuseMemoするとVercelのデプロイ時に"useMemo" cannot be called inside a callback */
+                    <HStack key={`keyboard-row-${row}`} mb="1%">
+                        {letters.map((letter, col)  => (
+                            <Button key={`keyboard-row-${row}-${col}`} disabled={answerState.status !== "PLAYING"} onClick={() => inputAnswer(letter)}>{letter}</Button>
+                        ))}
+                    </HStack>
                 )}
             </Box>
             <Center>
