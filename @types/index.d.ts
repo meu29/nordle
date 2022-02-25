@@ -5,9 +5,12 @@ type WordleTheme = {
     tag: string;
 }
 
-type Answer = string[];
+type LetterColor = {
+    color: string;
+    bg: string;
+}
 
-type LetterStyle = {
-    color: string, 
-    bg: string
+type Restaurant = {
+    name: string;
+    address: string;
 }

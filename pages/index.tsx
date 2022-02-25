@@ -1,55 +1,64 @@
 import type { NextPage, GetStaticProps } from "next";
-import { useEffect } from "react";
-import { Container, VStack, HStack, Text, Button, Center, useToast } from "@chakra-ui/react";
-import { Keyboard } from "../components/keyboard";
-import { ColoredLetterBoxGroup } from "../components/colored-letter-box-group";
+import { Container, HStack, Button, Box, Center, useToast } from "@chakra-ui/react";
+import { useEffect, useMemo } from "react";
 import { useAnswerState } from "../hooks/answer";
-import { usePlayLog } from "../hooks/playlog";
+import { usePastThemes } from "../hooks/past-theme";
 import { client } from "../cms";
+import { KEYBOARD_LETTERS, randomSelect } from "../utils";
 
 const IndexPage: NextPage<IndexPageProps> = ({ theme }) => {
 
-    const { answerState, inputAnswer, deleteAnswer, submitAnswer } = useAnswerState(theme.content_furigana.length);
-
-    const { updatePlayLog } = usePlayLog();
-
+    const { answerState, inputAnswer, deleteAnswer, submitAnswer } = useAnswerState(theme.content_furigana);
+    const { addPastTheme } = usePastThemes();
     const toast = useToast();
 
     useEffect(() => {
-        if (answerState.row > 0) {
-            /* ここでpositionを指定するとエラーになった */
-            let toast_option = {description: `正解は${theme.content}(${theme.content_furigana})でした`, isClosable: true}
-            if (answerState.answers[answerState.row - 1].join("") === theme.content_furigana) {
-                toast({...toast_option, title: "正解", status: "success", position: "top"});
-                updatePlayLog(true);
-            } else if (answerState.row === 5) {
-                toast({...toast_option, title: "不正解", status: "error", position: "top"});
-                updatePlayLog(false);
-            }
+        if (answerState.status === "SUCCESS" || answerState.status === "FAILURE") {
+            toast({
+                title: `${theme.content}(${theme.content_furigana})`,
+                isClosable: true,
+                position: "top"
+            });
+            addPastTheme(theme);
         }
-    }, [answerState.row]);
+    }, [answerState.status]);
 
     return (
         <Container>
-            <VStack mb="10%">
-                {answerState.answers.map((answer, row) => 
-                    <div key={`colored-letter-${row}`}>
-                        <ColoredLetterBoxGroup row={row} answer={answer} theme_content={theme.content_furigana} checked={answerState.row > row} />
-                    </div>
+            <Box mb="10%">
+                {Object.keys(answerState.answers).map(row => (
+                    <HStack mb="1%" key={`theme-${row}`}>
+                        {Object.keys(answerState.colors[row]).map(col => (
+                            <Box key={`theme-${row}-${col}`} p="5" borderWidth="1px" borderRadius="lg" color={answerState.colors[row][col].color} bg={answerState.colors[row][col].bg}>
+                                {answerState.answers[row][col] === undefined ? "　" : answerState.answers[row][col]}
+                            </Box>
+                        ))}
+                    </HStack>
+                ))}
+            </Box>
+            <Box mb="3%">
+                {KEYBOARD_LETTERS.map((letters, row) => 
+                    useMemo(() => (
+                        <HStack key={`keyboard-row-${row}`} mb="1%">
+                            {letters.map((letter, col)  => (
+                                <Button key={`keyboard-row-${row}-${col}`} disabled={answerState.status !== "PLAYING"} onClick={() => inputAnswer(letter)}>{letter}</Button>
+                            ))}
+                        </HStack>
+                    ), [answerState.status])
                 )}
-            </VStack>
-            <Keyboard handleLetterButtonClick={inputAnswer} />
+            </Box>
             <Center>
                 <HStack>
-                    <Button onClick={deleteAnswer} color="white" bg="tomato">一文字削除</Button>
-                    <Button onClick={submitAnswer} color="white" bg="skyblue">解答</Button>
+                    <Button onClick={deleteAnswer} disabled={answerState.status !== "PLAYING"}>Delete</Button>
+                    <Button onClick={submitAnswer} disabled={answerState.status !== "PLAYING"}>Enter</Button>
                 </HStack>
             </Center>
         </Container>
-    );
+    )
 
 }
 
+/* getStaticPropsでも別のページから戻ってくるとpropsの値が変わっている */
 export const getStaticProps: GetStaticProps = async () => {
 
     const res = await client.get({
@@ -59,18 +68,16 @@ export const getStaticProps: GetStaticProps = async () => {
         }
     });
 
-    const themes = res.contents.map(content => {
-        return {
-            ...content,
-            tag: content.tag[0]
-        }
-    });
+    const content = randomSelect<any>(res.contents);
 
+    //ここで店apiも叩く
     return {
         props: {
-            theme: themes[Math.floor(Math.random() * themes.length)] 
-        },
-        revalidate: 10
+            theme: {
+                ...content,
+                tag: content.tag[0]
+            }
+        }
     }
 
 }

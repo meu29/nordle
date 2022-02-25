@@ -5,7 +5,8 @@ type UseAnswerState = {
     submitAnswer: () => void;
 }
 
-type UsePlayLogs = {
-    playlog: PlayLogState;
-    updatePlayLog: (cleared: boolean) => void;
+type UsePastThemes = {
+    past_themes: PastWordleThemeState;
+    addPastTheme: (theme: WordleTheme) => void;
+    deletePastTheme: (id: string) => void;
 }
