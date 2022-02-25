@@ -29,7 +29,7 @@ const RestaurantPage: NextPage = () => {
             <Select value={pref_code} onChange={handlePrefSelectChange}>
                 <option value="">指定なし</option>
                 {Object.keys(PREF_CODES).map(pref => 
-                    <option value={PREF_CODES[pref]}>{pref}</option>    
+                    <option key={PREF_CODES[pref]} value={PREF_CODES[pref]}>{pref}</option>    
                 )}
             </Select>
             {JSON.stringify(data)} 
