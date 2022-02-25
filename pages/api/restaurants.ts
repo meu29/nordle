@@ -1,13 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+const getQueryValue = (query_value: string | string[]) => Array.isArray(query_value) ? query_value[0] : query_value;
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const keyword = Array.isArray(req.query.keyword) ? req.query.keyword[0] : req.query.keyword;
-    const url = `http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${process.env.HOTPEPPER_API_KEY}&format=json&keyword=${encodeURI(keyword)}`;
+    const url = `http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${process.env.HOTPEPPER_API_KEY}&format=json&keyword=${encodeURI(getQueryValue(req.query.keyword))}&large_area=${getQueryValue(req.query.pref_code)}`;
 
     try {
         const data = await (await fetch(url)).json();
-        return res.json({shops: data.results.shop.map(shop => {
+        return res.json({restaurants: data.results.shop.map(shop => {
             return {
                 name: shop.name,
                 address: shop.address

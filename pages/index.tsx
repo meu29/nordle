@@ -2,11 +2,14 @@ import type { NextPage, GetStaticProps } from "next";
 import { Container, HStack, Button, Box, Center, useToast } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
 import { useAnswerState } from "../hooks/answer";
-import { KEYBOARD_LETTERS } from "../utils";
+import { usePastThemes } from "../hooks/past-theme";
+import { client } from "../cms";
+import { KEYBOARD_LETTERS, randomSelect } from "../utils";
 
 const IndexPage: NextPage<IndexPageProps> = ({ theme }) => {
 
     const { answerState, inputAnswer, deleteAnswer, submitAnswer } = useAnswerState(theme.content_furigana);
+    const { addPastTheme } = usePastThemes();
     const toast = useToast();
 
     useEffect(() => {
@@ -16,6 +19,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ theme }) => {
                 isClosable: true,
                 position: "top"
             });
+            addPastTheme(theme);
         }
     }, [answerState.status]);
 
@@ -54,17 +58,28 @@ const IndexPage: NextPage<IndexPageProps> = ({ theme }) => {
 
 }
 
+/* getStaticPropsでも別のページから戻ってくるとpropsの値が変わっている */
 export const getStaticProps: GetStaticProps = async () => {
+
+    const res = await client.get({
+        endpoint: "themes",
+        queries: {
+            fields: "id,content,content_furigana,tag"
+        }
+    });
+
+    const content = randomSelect<any>(res.contents);
+
+    //ここで店apiも叩く
     return {
         props: {
             theme: {
-                id: "sample",
-                content: "家系ラーメン",
-                content_furigana: "いえけいらーめん",
-                tag: "ラーメン",
+                ...content,
+                tag: content.tag[0]
             }
         }
     }
+
 }
 
 export default IndexPage;

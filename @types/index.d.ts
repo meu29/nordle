@@ -10,7 +10,7 @@ type LetterColor = {
     bg: string;
 }
 
-type Shop = {
+type Restaurant = {
     name: string;
     address: string;
 }

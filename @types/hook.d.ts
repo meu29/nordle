@@ -4,3 +4,9 @@ type UseAnswerState = {
     deleteAnswer: () => void;
     submitAnswer: () => void;
 }
+
+type UsePastThemes = {
+    past_themes: PastWordleThemeState;
+    addPastTheme: (theme: WordleTheme) => void;
+    deletePastTheme: (id: string) => void;
+}

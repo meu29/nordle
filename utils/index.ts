@@ -33,3 +33,11 @@ export const LETTER_COLORS = {
         bg: "#ffffff"
     }
 } as const;
+
+export const PREF_CODES = {
+    "東京都": "Z011",
+    "神奈川県": "Z012",
+    "埼玉県": "Z013"
+} as const;
+
+export const randomSelect = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
